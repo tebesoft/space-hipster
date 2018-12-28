@@ -26,8 +26,11 @@ export default class Game extends Phaser.Scene {
     // Player
     this.player = this.add.existing(new Player(this, this.cameras.main.centerX, this.game.canvas.height-50));
     this.physics.add.existing(this.player);
-    this.player.setupPhysics();
+    this.player.initPhysics();
+    this.player.initBullets();
   }
+
+
 
   /**
    *  Called when a scene is updated. Updates to game logic, physics and game

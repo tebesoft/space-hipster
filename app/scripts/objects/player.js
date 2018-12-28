@@ -16,8 +16,27 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     //  Add this game object to the owner scene.
     //scene.children.add(this);
   }
-  setupPhysics() {
+  initPhysics() {
     this.body.allowGravity = false;
     this.body.setCollideWorldBounds(true);
+  }
+
+  initBullets() {
+    this.bullets = this.scene.physics.add.group({
+      allowGravity: false
+    });
+    this.shootingTimer = this.scene.time.addEvent({
+      delay: 200,
+      callback: this.createBullet,
+      //args: [],
+      callbackScope: this,
+      loop: true
+    });
+  }
+
+  createBullet() {
+    const bullet = this.bullets.getFirstDead(true, this.body.center.x, this.body.y, 'bullet');
+    bullet.setActive(true);
+    bullet.body.setVelocityY(this.bulletSpeed);
   }
 }
