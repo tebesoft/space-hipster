@@ -1,4 +1,4 @@
-//import Logo from '@/objects/logo';
+import Player from '@/objects/player';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -22,6 +22,11 @@ export default class Game extends Phaser.Scene {
     // this.logo = this.add.existing(new Logo(this));
     this.background = this.add.tileSprite(0, 0, this.game.canvas.width, this.game.canvas.height, 'space');
     this.background.setOrigin(0);
+
+    // Player
+    this.player = this.add.existing(new Player(this, this.cameras.main.centerX, this.game.canvas.height-50));
+    this.physics.add.existing(this.player);
+    this.player.setupPhysics();
   }
 
   /**
@@ -34,5 +39,13 @@ export default class Game extends Phaser.Scene {
    */
   update(/* t, dt */) {
     this.background.tilePositionY -= 0.5;
+
+    this.player.body.setVelocityX(0);
+
+    if ( this.game.input.activePointer.isDown ) {
+      const targetX = this.game.input.activePointer.position.x;
+      const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
+      this.player.body.setVelocityX(direction * this.player.speed);
+    }
   }
 }

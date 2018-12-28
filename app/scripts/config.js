@@ -79,8 +79,9 @@ export const physics = {
    *
    *  This engine becomes available under a `physics` property on game scenes.
    */
-  // arcade: {
-  // },
+  arcade: {
+    gravity: { y: 1000 }
+  },
 
   /**
    *  Matter.js parameters.
@@ -101,7 +102,7 @@ export const physics = {
   /**
    *  Enable a physics engine by default on all game scenes.
    */
-  default: false
+  default: 'arcade'
 };
 
 /**

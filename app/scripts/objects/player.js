@@ -1,4 +1,4 @@
-export default class Player extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.Physics.Arcade.Sprite {
   /**
    *  My custom sprite.
    *
@@ -13,8 +13,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     super(scene, x, y, 'player');
     this.speed = 200;
     this.bulletSpeed = -1000;
-
     //  Add this game object to the owner scene.
     //scene.children.add(this);
+  }
+  setupPhysics() {
+    this.body.allowGravity = false;
+    this.body.setCollideWorldBounds(true);
   }
 }
