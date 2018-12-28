@@ -7,6 +7,7 @@
 
 //  Import created game scenes.
 import * as scenes from '@/scenes';
+import HealthPlugin from 'phaser-component-health';
 
 //  HINT: Import plugins, custom or trusted third-party ones, here.
 // import ExamplePlugin from 'example-plugin';
@@ -147,6 +148,10 @@ export const plugins = {
     //   //  `this.plugins.start('<key>')`.
     //   start: true
     // },
+    {
+      key: 'HealthPlugin',
+      plugin: HealthPlugin
+    }
   ],
 
   scene: [

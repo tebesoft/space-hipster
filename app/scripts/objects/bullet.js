@@ -2,7 +2,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'bullet');
     this.bulletSpeed = -1000;
-    this.scene.add.existing(this);
+    scene.add.existing(this);
   }
 
   setupWorldCollision() {

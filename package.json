@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "phaser": "^3.12.0"
+    "phaser": "^3.12.0",
+    "phaser-component-health": "^1.1.0"
   },
   "private": true
 }

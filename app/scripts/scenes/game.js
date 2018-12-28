@@ -1,4 +1,5 @@
 import Player from '@/objects/player';
+import Enemy from '@/objects/enemy';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -24,6 +25,7 @@ export default class Game extends Phaser.Scene {
     // this.physics.world.on('worldbounds', function (body) {
     //   console.log('worldbounds', body);
     // });
+    this.plugins.start('HealthPlugin');
     this.background = this.add.tileSprite(0, 0, this.game.canvas.width, this.game.canvas.height, 'space');
     this.background.setOrigin(0);
 
@@ -33,6 +35,7 @@ export default class Game extends Phaser.Scene {
     this.player.initPhysics();
     this.player.initBullets();
 
+    this.add.existing(new Enemy(this, 100, 100, 'redEnemy'));
   }
 
 
