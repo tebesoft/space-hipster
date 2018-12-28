@@ -1,3 +1,5 @@
+import Bullet from './bullet';
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   /**
    *  My custom sprite.
@@ -12,7 +14,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'player');
     this.speed = 200;
-    this.bulletSpeed = -1000;
     //  Add this game object to the owner scene.
     //scene.children.add(this);
   }
@@ -26,17 +27,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       allowGravity: false
     });
     this.shootingTimer = this.scene.time.addEvent({
-      delay: 200,
-      callback: this.createBullet,
+      delay: 300,
+      callback: this.spawnBullet,
       //args: [],
       callbackScope: this,
       loop: true
     });
   }
 
-  createBullet() {
-    const bullet = this.bullets.getFirstDead(true, this.body.center.x, this.body.y, 'bullet');
-    bullet.setActive(true);
-    bullet.body.setVelocityY(this.bulletSpeed);
+  spawnBullet() {
+    let bullet = this.bullets.getFirstDead(false, this.x, this.body.top);
+    if (bullet === null) {
+      bullet = new Bullet(this.scene, this.x, this.body.top);
+      this.bullets.add(bullet);
+      bullet.setupWorldCollision();
+    }
+    bullet.activate();
   }
 }

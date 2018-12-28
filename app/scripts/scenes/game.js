@@ -20,6 +20,10 @@ export default class Game extends Phaser.Scene {
   create(/* data */) {
     //  TODO: Replace this content with really cool game code here :)
     // this.logo = this.add.existing(new Logo(this));
+    //this.physics.world.setBoundsCollision(true, true, true, true);
+    // this.physics.world.on('worldbounds', function (body) {
+    //   console.log('worldbounds', body);
+    // });
     this.background = this.add.tileSprite(0, 0, this.game.canvas.width, this.game.canvas.height, 'space');
     this.background.setOrigin(0);
 
@@ -28,6 +32,7 @@ export default class Game extends Phaser.Scene {
     this.physics.add.existing(this.player);
     this.player.initPhysics();
     this.player.initBullets();
+
   }
 
 
