@@ -1,5 +1,6 @@
 import Player from '@/objects/player';
 import Enemy from '@/objects/enemy';
+import { ENGINE_METHOD_PKEY_ASN1_METHS } from 'constants';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -35,10 +36,21 @@ export default class Game extends Phaser.Scene {
     this.player.initPhysics();
     this.player.initBullets();
 
-    this.add.existing(new Enemy(this, 100, 100, 'redEnemy'));
+    // Enemies
+    this.enemy = this.add.existing(new Enemy(this, 100, 100, 'redEnemy'));
+    this.enemies = this.physics.add.group({
+      allowGravity: false
+    });
+    this.enemies.add(this.enemy);
+    this.enemy.initPhysics();
+
+    this.physics.add.overlap(this.player.bullets, this.enemies, this.hitEnemy, null, this);
   }
 
-
+  hitEnemy(bullet, enemy) {
+    enemy.hit();
+    bullet.deactivate();
+  }
 
   /**
    *  Called when a scene is updated. Updates to game logic, physics and game
@@ -58,5 +70,7 @@ export default class Game extends Phaser.Scene {
       const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
       this.player.body.setVelocityX(direction * this.player.speed);
     }
+
+    this.enemy.update();
   }
 }
