@@ -78,8 +78,15 @@ export default class Game extends Phaser.Scene {
 
     //if ( this.game.input.activePointer.isDown ) {
     const targetX = this.game.input.activePointer.position.x;
-    const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
-    this.player.body.setVelocityX(direction * this.player.speed);
+    const targetY = this.game.input.activePointer.position.y;
+    const targetPos = new Phaser.Math.Vector2(targetX, targetY);
+    const playerPos = new Phaser.Math.Vector2(this.player.x, this.player.y);
+
+    const direction = targetPos.subtract(playerPos);
+    this.player.body.setVelocityX(direction.normalize().x * this.player.speed);
+
+    // const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
+    // this.player.body.setVelocityX(direction.x * this.player.speed);
     //}
 
     this.enemy.update();

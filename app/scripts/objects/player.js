@@ -13,7 +13,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
    */
   constructor(scene, x, y) {
     super(scene, x, y, 'player');
-    this.speed = 200;
+    this.speed = 300;
 
     this.on('die', this.dead, this);
   }
