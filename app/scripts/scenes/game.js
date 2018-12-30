@@ -1,6 +1,5 @@
 import Player from '@/objects/player';
 import Enemy from '@/objects/enemy';
-import { ENGINE_METHOD_PKEY_ASN1_METHS } from 'constants';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -27,6 +26,8 @@ export default class Game extends Phaser.Scene {
     //   console.log('worldbounds', body);
     // });
     this.plugins.start('HealthPlugin');
+
+
     this.background = this.add.tileSprite(0, 0, this.game.canvas.width, this.game.canvas.height, 'space');
     this.background.setOrigin(0);
 
@@ -45,6 +46,7 @@ export default class Game extends Phaser.Scene {
     this.enemy.initPhysics();
 
     this.physics.add.overlap(this.player.bullets, this.enemies, this.hitEnemy, null, this);
+
   }
 
   hitEnemy(bullet, enemy) {

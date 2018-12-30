@@ -37,25 +37,42 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     // this.scene.add.existing(this);
 
     this.on('die', this.deactivate, this);
+
+    // Particles
+    this.particles = scene.add.particles('enemyParticle');
   }
 
   hit() {
     this.damage();
     this.anims.play(this.animKeys.getHit);
+
+    if (this.isDead()) {
+      this.emitter.explode(100, this.x, this.y);
+    }
   }
 
   initPhysics() {
     Phaser.Health.AddTo(this, 10);
     this.body.velocity.x = 100;
     this.body.velocity.y = 50;
+
+    this.emitter = this.particles.createEmitter({
+      on: false,
+      speed: { min: -200, max: 200 },
+      lifespan: 500,
+      blendMode: Phaser.BlendModes.ADD
+    });
   }
 
   deactivate() {
-    this.body.setVelocity(0);
-    this.setPosition(this.startPosition.x, this.startPosition.y);
-    this.kill();            // set helth to zero
-    this.setActive(false);
-    this.setVisible(false);
+    // deactivate at the end of event queue
+    setTimeout(() => {
+      this.body.setVelocity(0);
+      this.setPosition(this.startPosition.x, this.startPosition.y);
+      this.kill();            // set helth to zero
+      this.setActive(false);
+      this.setVisible(false);
+    }, 0);
   }
 
   update() {
