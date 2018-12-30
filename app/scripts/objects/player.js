@@ -14,10 +14,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'player');
     this.speed = 200;
-    //  Add this game object to the owner scene.
-    //scene.children.add(this);
+
+    this.on('die', this.dead, this);
   }
+
   initPhysics() {
+    Phaser.Health.AddTo(this, 10);
     this.body.allowGravity = false;
     this.body.setCollideWorldBounds(true);
   }
@@ -38,10 +40,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   spawnBullet() {
     let bullet = this.bullets.getFirstDead(false, this.x, this.body.top);
     if (bullet === null) {
-      bullet = new Bullet(this.scene, this.x, this.body.top);
+      bullet = new Bullet(this.scene, this.x, this.body.top, -1000);
       this.bullets.add(bullet);
       bullet.setupWorldCollision();
     }
     bullet.activate();
+  }
+
+  hit() {
+    this.damage();
+  }
+
+  dead() {
+    this.scene.scene.restart();
+    // this.scene.restart();
   }
 }

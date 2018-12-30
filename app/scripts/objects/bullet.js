@@ -1,7 +1,7 @@
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y) {
-    super(scene, x, y, 'bullet');
-    this.bulletSpeed = -1000;
+  constructor(scene, x, y, bulletSpeed, texture='bullet') {
+    super(scene, x, y, texture);
+    this.bulletSpeed = bulletSpeed;
     scene.add.existing(this);
   }
 
@@ -28,5 +28,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   deactivate() {
     this.setVisible(false);
     this.setActive(false);
+    this.setPosition(0,0);
   }
 }

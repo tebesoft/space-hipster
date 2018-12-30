@@ -1,5 +1,6 @@
 import Player from '@/objects/player';
 import Enemy from '@/objects/enemy';
+import EnemyBulletsPool from '@/objects/enemy-bullets-pool';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -45,12 +46,20 @@ export default class Game extends Phaser.Scene {
     this.enemies.add(this.enemy);
     this.enemy.initPhysics();
 
+    this.bulletsPool = new EnemyBulletsPool(this);
+
     this.physics.add.overlap(this.player.bullets, this.enemies, this.hitEnemy, null, this);
+    this.physics.add.overlap(this.bulletsPool.bullets, this.player, this.hitPlayer, null, this);
 
   }
 
   hitEnemy(bullet, enemy) {
     enemy.hit();
+    bullet.deactivate();
+  }
+
+  hitPlayer(player, bullet) {
+    player.hit();
     bullet.deactivate();
   }
 
@@ -67,11 +76,11 @@ export default class Game extends Phaser.Scene {
 
     this.player.body.setVelocityX(0);
 
-    if ( this.game.input.activePointer.isDown ) {
-      const targetX = this.game.input.activePointer.position.x;
-      const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
-      this.player.body.setVelocityX(direction * this.player.speed);
-    }
+    //if ( this.game.input.activePointer.isDown ) {
+    const targetX = this.game.input.activePointer.position.x;
+    const direction = targetX >= this.cameras.main.centerX ? 1 : -1;
+    this.player.body.setVelocityX(direction * this.player.speed);
+    //}
 
     this.enemy.update();
   }

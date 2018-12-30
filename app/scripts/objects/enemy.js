@@ -42,15 +42,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.particles = scene.add.particles('enemyParticle');
   }
 
-  hit() {
-    this.damage();
-    this.anims.play(this.animKeys.getHit);
-
-    if (this.isDead()) {
-      this.emitter.explode(100, this.x, this.y);
-    }
-  }
-
   initPhysics() {
     Phaser.Health.AddTo(this, 10);
     this.body.velocity.x = 100;
@@ -62,6 +53,16 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       lifespan: 500,
       blendMode: Phaser.BlendModes.ADD
     });
+  }
+
+
+  hit() {
+    this.damage();
+    this.anims.play(this.animKeys.getHit);
+
+    if (this.isDead()) {
+      this.emitter.explode(100, this.x, this.y);
+    }
   }
 
   deactivate() {
