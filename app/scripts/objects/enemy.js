@@ -14,19 +14,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.reset(x, y, key, scale, health, speedX, speedY);
 
-    this.animKeys = {
-      getHit: 'getHit'
-    };
-
-    if (!scene.anims.get(this.animKeys.getHit)) {
-      scene.anims.create({
-        key: this.animKeys.getHit,
-        frames: scene.anims.generateFrameNumbers(this.texture.key, { frames: [0, 1, 2, 1, 0] }),
-        frameRate: 25,
-        repeat: 0
-      });
-    }
-
     // screen bounds
     this.leftBound = 0.05 * scene.game.canvas.width;
     this.rightBound = 0.95 * scene.game.canvas.width;
@@ -40,6 +27,15 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     // Particles
     this.particles = scene.add.particles('enemyParticle');
+
+    if (!this.scene.anims.get(`${this.texture.key}Anim`)) {
+      this.scene.anims.create({
+        key: `${this.texture.key}Anim`,
+        frames: this.scene.anims.generateFrameNumbers(this.texture.key, { frames: [0, 1, 2, 1, 0] }),
+        frameRate: 25,
+        repeat: 0
+      });
+    }
 
     scene.add.existing(this);
   }
@@ -74,7 +70,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   hit() {
     this.damage();
-    this.anims.play(this.animKeys.getHit);
+    this.anims.play(`${this.texture.key}Anim`);
 
     if (this.isDead()) {
       this.emitter.explode(100, this.x, this.y);
