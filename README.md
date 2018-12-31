@@ -1,4 +1,4 @@
-# [The space hipster game](https://example.com/)
+# [The space hipster game](https://tebesoft.github.io/space-hipster/dist/index.html)
 
 ![Screenshot](screenshot.png)
 
