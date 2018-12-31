@@ -6,7 +6,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   setupWorldCollision() {
-    this.body.setCollideWorldBounds(true);
 
     this.body.onWorldBounds = true;
 
@@ -20,14 +19,16 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   activate() {
+    this.body.setCollideWorldBounds(true);
     this.setActive(true);
     this.setVisible(true);
     this.body.setVelocityY(this.bulletSpeed);
   }
 
   deactivate() {
+    this.body.setCollideWorldBounds(false);
     this.setVisible(false);
     this.setActive(false);
-    this.setPosition(0,0);
+    this.setPosition(-1000, 200);
   }
 }

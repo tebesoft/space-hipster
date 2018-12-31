@@ -58,9 +58,9 @@ export default class SplashScreen extends Phaser.Scene {
       spacing: 1
     });
 
-    this.load.text('level1', 'data/level1.json');
-    this.load.text('level2', 'data/level2.json');
-    this.load.text('level3', 'data/level3.json');
+    this.load.json('level1', 'data/level1.json');
+    this.load.json('level2', 'data/level2.json');
+    this.load.json('level3', 'data/level3.json');
 
     this.load.audio('orchestra', ['audio/8bit-orchestra.mp3', 'audio/8bit-orchestra.ogg']);
   }

@@ -1,6 +1,6 @@
 import Player from '@/objects/player';
-import Enemy from '@/objects/enemy';
 import EnemyBulletsPool from '@/objects/enemy-bullets-pool';
+import EnemyPool from '@/objects/enemy-pool';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -20,15 +20,15 @@ export default class Game extends Phaser.Scene {
    *  @param {object} data Initialization parameters.
    */
   create(/* data */) {
-    //  TODO: Replace this content with really cool game code here :)
-    // this.logo = this.add.existing(new Logo(this));
     //this.physics.world.setBoundsCollision(true, true, true, true);
     // this.physics.world.on('worldbounds', function (body) {
     //   console.log('worldbounds', body);
     // });
+
+    this.level = 1;
+    this.levelData = this.cache.json.get(`level${this.level}`);
+
     this.plugins.start('HealthPlugin');
-
-
     this.background = this.add.tileSprite(0, 0, this.game.canvas.width, this.game.canvas.height, 'space');
     this.background.setOrigin(0);
 
@@ -39,18 +39,15 @@ export default class Game extends Phaser.Scene {
     this.player.initBullets();
 
     // Enemies
-    this.enemy = this.add.existing(new Enemy(this, 100, 100, 'redEnemy'));
-    this.enemies = this.physics.add.group({
-      allowGravity: false
-    });
-    this.enemies.add(this.enemy);
-    this.enemy.initPhysics();
+    this.enemyPool = new EnemyPool(this, this.levelData);
+    this.enemyPool.scheduleNextEnemy();
+
+    //this.enemyPool.spawnEnemy(100, 100, 10, 'greenEnemy', 1, 100, 100);
 
     this.bulletsPool = new EnemyBulletsPool(this);
 
-    this.physics.add.overlap(this.player.bullets, this.enemies, this.hitEnemy, null, this);
+    this.physics.add.overlap(this.player.bullets, this.enemyPool.enemies, this.hitEnemy, null, this);
     this.physics.add.overlap(this.bulletsPool.bullets, this.player, this.hitPlayer, null, this);
-
   }
 
   hitEnemy(bullet, enemy) {
@@ -89,6 +86,6 @@ export default class Game extends Phaser.Scene {
     // this.player.body.setVelocityX(direction.x * this.player.speed);
     //}
 
-    this.enemy.update();
+    this.enemyPool.update();
   }
 }

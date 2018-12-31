@@ -9,14 +9,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
    *  @param {number} x - The horizontal coordinate relative to the scene viewport.
    *  @param {number} y - The vertical coordinate relative to the scene viewport.
    */
-  constructor(scene, x, y, key) {
+  constructor(scene, x, y, key, scale, health, speedX, speedY) {
     super(scene, x, y, key);
+
+    this.reset(x, y, key, scale, health, speedX, speedY);
 
     this.animKeys = {
       getHit: 'getHit'
     };
-
-    this.startPosition = { x, y };
 
     if (!scene.anims.get(this.animKeys.getHit)) {
       scene.anims.create({
@@ -40,19 +40,35 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     // Particles
     this.particles = scene.add.particles('enemyParticle');
+
+    scene.add.existing(this);
+  }
+
+  reset(x, y, key, scale, health, speedX, speedY) {
+    this.startPosition = { x, y };
+    this.speedX = speedX;
+    this.speedY = speedY;
+    this.health = health;
+    this.setTexture(key);
+    this.scale = scale;
+    //this.setDisplaySize(this.width, this.height);
+    //this.body.setCollideWorldBounds(this.width, this.height);
   }
 
   initPhysics() {
-    Phaser.Health.AddTo(this, 10);
-    this.body.velocity.x = 100;
-    this.body.velocity.y = 50;
-
+    Phaser.Health.AddTo(this, this.health);
+    this.setVelocity(this.speedX, this.speedY);
     this.emitter = this.particles.createEmitter({
       on: false,
       speed: { min: -200, max: 200 },
       lifespan: 500,
       blendMode: Phaser.BlendModes.ADD
     });
+  }
+
+  setVelocity(x, y) {
+    this.body.velocity.x = x;
+    this.body.velocity.y = y;
   }
 
 
@@ -63,6 +79,14 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.isDead()) {
       this.emitter.explode(100, this.x, this.y);
     }
+  }
+
+  activate() {
+    this.setActive(true);
+    this.setVisible(true);
+    this.revive(this.health);
+    this.setVelocity(this.speedX, this.speedY);
+    this.setScale(this.scale);
   }
 
   deactivate() {

@@ -31,7 +31,8 @@ export default class EnemyBulletsPool {
   }
 
   spawnBullet() {
-    const enemies = this.scene.enemies.getChildren().filter((child) => child.active);
+    const enemies = this.scene.enemyPool.enemies.getChildren().filter((child) => child.active);
+
     enemies.forEach((enemy) => {
       let bullet = this.bullets.getFirstDead(false, enemy.x, enemy.y);
       if (bullet === null) {
