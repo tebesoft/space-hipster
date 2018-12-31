@@ -52,6 +52,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   dead() {
+    this.scene.orchestra.stop();
     this.scene.scene.restart();
     // this.scene.restart();
   }

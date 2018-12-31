@@ -19,13 +19,13 @@ export default class Game extends Phaser.Scene {
    *  @protected
    *  @param {object} data Initialization parameters.
    */
-  create(/* data */) {
+  create(data) {
     //this.physics.world.setBoundsCollision(true, true, true, true);
     // this.physics.world.on('worldbounds', function (body) {
     //   console.log('worldbounds', body);
     // });
-
-    this.level = 1;
+    this.numLevels = 3;
+    this.level = data.level ? data.level : 1;
     this.levelData = this.cache.json.get(`level${this.level}`);
 
     this.plugins.start('HealthPlugin');
@@ -48,6 +48,21 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.overlap(this.player.bullets, this.enemyPool.enemies, this.hitEnemy, null, this);
     this.physics.add.overlap(this.bulletsPool.bullets, this.player, this.hitPlayer, null, this);
+
+    // Level timer
+    this.time.delayedCall(this.levelData.duration * 1000, () => {
+      if (this.level < this.numLevels) {
+        this.level++;
+      } else {
+        this.level = 1;
+      }
+      this.orchestra.stop();
+      this.scene.restart({ level: this.level });
+    });
+
+    // Music
+    this.orchestra = this.sound.add('orchestra');
+    this.orchestra.play();
   }
 
   hitEnemy(bullet, enemy) {

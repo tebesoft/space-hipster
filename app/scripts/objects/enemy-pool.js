@@ -15,12 +15,12 @@ export default class EnemyPool {
     let nextEnemy = this.levelData.enemies[this.currentEnemyIndex];
     if (!nextEnemy) return;
 
-    let nextTime = 1000 * (nextEnemy.time - (this.currentEnemyIndex == 0 ? 0 : this.levelData.enemies[this.currentEnemyIndex].time - 1));
+    let nextTime = 1000 * (nextEnemy.time - (this.currentEnemyIndex == 0 ? 0 : this.levelData.enemies[this.currentEnemyIndex - 1].time));
 
     this.scene.time.delayedCall(
       nextTime,
       () => {
-        this.spawnEnemy(nextEnemy.x, nextEnemy.y, nextEnemy.health, nextEnemy.key, nextEnemy.scale, nextEnemy.speedX, nextEnemy.speedY);
+        this.spawnEnemy(nextEnemy.x*this.scene.game.canvas.width, -100, nextEnemy.health, nextEnemy.key, nextEnemy.scale, nextEnemy.speedX, nextEnemy.speedY);
         this.currentEnemyIndex++;
         this.scheduleNextEnemy();
       },
@@ -31,7 +31,6 @@ export default class EnemyPool {
 
   spawnEnemy(x, y, health, key, scale, speedX, speedY) {
     let enemy = this.enemies.getFirstDead(false, x, y);
-
     if (enemy === null) {
       enemy = new Enemy(this.scene, x, y, key, scale, health, speedX, speedY);
       this.enemies.add(enemy);
